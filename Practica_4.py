@@ -32,11 +32,30 @@ class Window:
 
     def Imprimir(self):
         list_process = self.Open_File()
-        #self.FIFO()
+        self.FIFO()
              
     def Open_File(self):
         with open("procesos.txt","r") as file:
             self.list_process = file.readlines()
+    
+    def FIFO(self):
+        List_Process_FIFO = self.list_process
+        while len(List_Process_FIFO) != 0:
+            process = List_Process_FIFO[0].split(",")
+            load = ""
+            lblprocess = Label(self.frame, text=process[0])
+            lblprocess.place(x=10, y=3)
+            self.window.update()
+            for count in range(int(process[2])):
+                lblLoad = Label(self.frame, text=f"{load} segundo: {count + 1}", bg="GREEN",fg="BLACK")
+                lblLoad.place(x=200, y=3)
+                load = load + self.Loading
+                self.window.update()
+                time.sleep(1)
+                lblLoad.destroy()
+            lblprocess.destroy()
+            self.window.update()
+            List_Process_FIFO.pop(0)
 
     def Process(self):
         Carga = "."
