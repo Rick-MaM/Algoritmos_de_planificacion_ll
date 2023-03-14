@@ -25,7 +25,7 @@ class Window:
         self.window.config(menu=bar_menu)
 
         self.frame = LabelFrame(self.window,text="PROCESO EN EJECUCION")
-        self.frame.place(x=20, y=50,width=410,height=60)
+        self.frame.place(x=20, y=20,width=410,height=60)
         
         table = ttk.Treeview(self.window, columns=("col1"))
         table.column("#0",width=133)
@@ -34,13 +34,13 @@ class Window:
         table.heading("#0", text="Proceso",anchor=CENTER)
         table.heading("col1", text="Estado", anchor=CENTER)
 
-        table.place(x=160, y=120)
+        table.place(x=160, y=100)
 
-        Label(self.window, text="-----> Proceso <-----",fg="BLUE").place(x=20,y=120)
+        Label(self.window, text="-----> Proceso <-----",fg="BLUE").place(x=20,y=100)
 
-        Label(self.window, text="-----> Prioridad <-----",fg="BLUE").place(x=20, y=180)
+        Label(self.window, text="-----> Prioridad <-----",fg="BLUE").place(x=20, y=160)
         
-        Label(self.window, text="-----> Tiempo <-----",fg="BLUE").place(x=20, y=240)
+        Label(self.window, text="-----> Tiempo <-----",fg="BLUE").place(x=20, y=220)
     
     def Add_Process(self):
         pass
