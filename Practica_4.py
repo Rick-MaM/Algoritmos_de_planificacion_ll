@@ -8,10 +8,16 @@ class Window:
         self.window.title("Algoritmos de planificacion")
         self.window.geometry("450x350")
 
+        bar_menu = Menu(self.window)
+        menu_Add = Menu(bar_menu)
+        menu_Add.add_command(label="Agregar",command=self.Add_Process)
+        bar_menu.add_cascade(label="Procesos",menu=menu_Add)
+        self.window.config(menu=bar_menu)
+
         self.frame = LabelFrame(self.window,text="PROCESO EN EJECUCION")
         self.frame.place(x=20, y=50,width=410,height=60)
        
-        btnStart = Button(self.window, text="Iniciar",command=self.Imprimir).place(x=30,y=10)
+        #btnStart = Button(self.window, text="Iniciar",command=self.Imprimir).place(x=30,y=10)
         
         table = ttk.Treeview(self.window, columns=("col1"))
         table.column("#0",width=133)
@@ -27,8 +33,9 @@ class Window:
         Label(self.window, text="-----> Prioridad <-----",fg="BLUE").place(x=20, y=180)
         
         Label(self.window, text="-----> Tiempo <-----",fg="BLUE").place(x=20, y=240)
-
-        self.Loading = "."
+    
+    def Add_Process(self):
+        pass
 
     def Imprimir(self):
         list_process = self.Open_File()
@@ -47,9 +54,9 @@ class Window:
             lblprocess.place(x=10, y=3)
             self.window.update()
             for count in range(int(process[2])):
-                lblLoad = Label(self.frame, text=f"{load} segundo: {count + 1}", bg="GREEN",fg="BLACK")
+                lblLoad = Label(self.frame, text=load, bg="GREEN",fg="GREEN")
                 lblLoad.place(x=200, y=3)
-                load = load + self.Loading
+                load = load + " "
                 self.window.update()
                 time.sleep(1)
                 lblLoad.destroy()
