@@ -8,7 +8,17 @@ class Window:
         self.window.title("Algoritmos de planificacion")
         self.window.geometry("450x350")
 
+        self.Open_File()
+
         bar_menu = Menu(self.window)
+
+        menu_process = Menu(bar_menu)
+        menu_process.add_command(label="Round Robin")
+        menu_process.add_command(label="SJF")
+        menu_process.add_command(label="FIFO",command=self.FIFO)
+        menu_process.add_command(label="Prioridad")
+        bar_menu.add_cascade(label="algoritmos", menu=menu_process)
+
         menu_Add = Menu(bar_menu)
         menu_Add.add_command(label="Agregar",command=self.Add_Process)
         bar_menu.add_cascade(label="Procesos",menu=menu_Add)
@@ -16,8 +26,6 @@ class Window:
 
         self.frame = LabelFrame(self.window,text="PROCESO EN EJECUCION")
         self.frame.place(x=20, y=50,width=410,height=60)
-       
-        #btnStart = Button(self.window, text="Iniciar",command=self.Imprimir).place(x=30,y=10)
         
         table = ttk.Treeview(self.window, columns=("col1"))
         table.column("#0",width=133)
@@ -38,8 +46,7 @@ class Window:
         pass
 
     def Imprimir(self):
-        list_process = self.Open_File()
-        self.FIFO()
+        pass
              
     def Open_File(self):
         with open("procesos.txt","r") as file:
