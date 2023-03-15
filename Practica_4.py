@@ -18,10 +18,10 @@ class Window:
         menu_process.add_command(label="SJF")
         menu_process.add_command(label="FIFO",command=self.FIFO)
         menu_process.add_command(label="Prioridad")
-        bar_menu.add_cascade(label="algoritmos", menu=menu_process)
+        bar_menu.add_cascade(label="Algoritmos", menu=menu_process)
 
         menu_Add = Menu(bar_menu)
-        menu_Add.add_command(label="Agregar",command=self.Add_Process)
+        menu_Add.add_command(label="Agregar",command=self.window_new_process)
         bar_menu.add_cascade(label="Procesos",menu=menu_Add)
         self.window.config(menu=bar_menu)
 
@@ -45,7 +45,7 @@ class Window:
 
         Label(self.window, text=">Tiempo de ejecucion<",fg="BLUE").place(x=20, y=280)
     
-    def Add_Process(self):
+    def window_new_process(self):
         window_add = Tk()
         window_add.title("Agregar")
         window_add.geometry("300x250")
@@ -89,6 +89,33 @@ class Window:
         with open("procesos.txt","r") as file:
             list_process = file.readlines()
         return list_process
+
+    def shoter_time(self, list_SJF):
+        Time = []
+        for count_time in range(len(list_SJF)):
+            process = list_SJF[count_time].split(",")
+            Time.append(int(process[2]))
+        Time.sort()
+        return Time
+
+    def SJF(self):
+        print("========> SJF <========")
+        self.File()
+        times = self.shoter_time(self.file)
+        number_process = len(self.file)
+        while len(self.file) != 0:
+            for count_process in range(number_process+1):
+                process = self.file[count_process].split(",")
+                if times[0] == int(process[2]):
+                    print("Proceso: ", process[0], "------> ", end="")
+                    for count in range(times[0]):
+                        time.sleep(1)
+                        print(".", end="")
+                    print("completado")
+                    break
+            self.file.pop(count_process)
+            number_process = len(self.file)
+            times.pop(0)
     
     def FIFO(self):
         List_Process_FIFO = self.Open_File()
@@ -130,13 +157,6 @@ class Window:
             self.lblpriority.destroy()
             self.lbltime.destroy()
 
-    def Process(self):
-        Carga = "."
-        for i in range(10):
-            lbl = Label(self.frame , text=Carga, bg="GREEN", fg="GREEN").grid(column=0, row=0)
-            Carga = Carga + Carga
-            self.window.update()
-            time.sleep(1)
 
         
 
