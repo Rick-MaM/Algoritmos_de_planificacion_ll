@@ -9,6 +9,7 @@ class Window:
         self.window.geometry("450x350")
 
         self.band_add = False
+        self.list_new_processes = []
 
         bar_menu = Menu(self.window)
 
@@ -41,6 +42,8 @@ class Window:
         Label(self.window, text="-----> Prioridad <-----",fg="BLUE").place(x=20, y=160)
         
         Label(self.window, text="-----> Tiempo <-----",fg="BLUE").place(x=20, y=220)
+
+        Label(self.window, text=">Tiempo de ejecucion<",fg="BLUE").place(x=20, y=280)
     
     def Add_Process(self):
         window_add = Tk()
@@ -69,17 +72,17 @@ class Window:
         window_add.mainloop
 
     def new_process(self):
-        self.new = self.txtProcess.get() + "," + self.txtPriority.get() + "," + self.txtTime.get()
+        new = self.txtProcess.get() + "," + self.txtPriority.get() + "," + self.txtTime.get()
+        self.list_new_processes.append(new)
         self.band_add = True
 
     def current_list(self,list_process):
         if self.option.get() == "Al final":
-            list_process.append(self.new)
+            list_process = list_process + self.list_new_processes
             return list_process
         elif self.option.get() == "Al principio":
             new_list_process = []
-            new_list_process.append(self.new)
-            new_list_process = new_list_process + list_process
+            new_list_process = self.list_new_processes + list_process
             return new_list_process
              
     def Open_File(self):
@@ -102,12 +105,15 @@ class Window:
             for count in range(int(process[2])):
                 lblLoad = Label(self.frame, text=load, bg="GREEN",fg="GREEN")
                 lblLoad.place(x=200, y=3)
+                lblTime = Label(self.window, text=count + 1)
+                lblTime.place(x=40,y=310)
                 load = load + " "
                 self.window.update()
                 time.sleep(1)
                 lblLoad.destroy()
             self.update_process_data(process[0], process[1], process[2], False)
             lblprocess.destroy()
+            lblTime.destroy()
             self.window.update()
             List_Process_FIFO.pop(0)
         
@@ -123,10 +129,6 @@ class Window:
             self.lblprocess.destroy()
             self.lblpriority.destroy()
             self.lbltime.destroy()
-
-
-
-
 
     def Process(self):
         Carga = "."
