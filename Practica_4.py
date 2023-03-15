@@ -93,14 +93,6 @@ class Window:
             list_process = file.readlines()
         return list_process
 
-    def sort_process(self, list_SJF,time_or_priority):
-        sort_process = []
-        for count_time in range(len(list_SJF)):
-            process = list_SJF[count_time].split(",")
-            sort_process.append(int(process[time_or_priority]))
-        sort_process.sort()
-        return sort_process
-
     def SJF(self):
         List_Process_SJF = self.Open_File()
         times = self.sort_process(List_Process_SJF,2)
@@ -211,6 +203,14 @@ class Window:
             List_Process_priority.pop(count_process)
             number_process = len(List_Process_priority)
             list_priority.pop(0)
+    
+    def sort_process(self, list_SJF, time_or_priority):
+        sort_process = []
+        for count_time in range(len(list_SJF)):
+            process = list_SJF[count_time].split(",")
+            sort_process.append(int(process[time_or_priority]))
+        sort_process.sort()
+        return sort_process
         
     def update_process_data(self,name,priority,time,insert):
         if insert:
