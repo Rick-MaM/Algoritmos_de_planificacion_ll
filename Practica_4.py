@@ -8,7 +8,6 @@ class Window:
         self.window.title("Algoritmos de planificacion")
         self.window.geometry("450x350")
 
-
         self.band_add = False
 
         bar_menu = Menu(self.window)
@@ -94,11 +93,11 @@ class Window:
             if self.band_add:
                 List_Process_FIFO = self.current_list(List_Process_FIFO)
                 self.band_add = False
-                print("Se agrego")
             process = List_Process_FIFO[0].split(",")
             load = ""
             lblprocess = Label(self.frame, text=process[0])
             lblprocess.place(x=10, y=3)
+            self.update_process_data(process[0],process[1],process[2],True)
             self.window.update()
             for count in range(int(process[2])):
                 lblLoad = Label(self.frame, text=load, bg="GREEN",fg="GREEN")
@@ -107,9 +106,27 @@ class Window:
                 self.window.update()
                 time.sleep(1)
                 lblLoad.destroy()
+            self.update_process_data(process[0], process[1], process[2], False)
             lblprocess.destroy()
             self.window.update()
             List_Process_FIFO.pop(0)
+        
+    def update_process_data(self,name,priority,time,insert):
+        if insert:
+            self.lblprocess = Label(self.window, text=name)
+            self.lblprocess.place(x=40,y=130)
+            self.lblpriority = Label(self.window, text=priority)
+            self.lblpriority.place(x=40, y=190)
+            self.lbltime = Label(self.window, text=time)
+            self.lbltime.place(x=40, y=250)
+        else:
+            self.lblprocess.destroy()
+            self.lblpriority.destroy()
+            self.lbltime.destroy()
+
+
+
+
 
     def Process(self):
         Carga = "."
