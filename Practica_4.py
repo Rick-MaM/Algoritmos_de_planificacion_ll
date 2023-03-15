@@ -92,6 +92,29 @@ class Window:
         with open("procesos.txt","r") as file:
             list_process = file.readlines()
         return list_process
+    
+    def Round_Robin(self):
+        print("========> Round Robin <========")
+        quantum = 3
+        self.File()
+        while len(self.file) != 0:
+            process = self.file[0].split(",")
+            time_process = int(process[2])
+            print("Proceso: ", process[0], "------>", end="")
+            for count_time in range(quantum):
+                if time_process == 0:
+                    break
+                else:
+                    time_process -= 1
+                time.sleep(1)
+                print(".", end="")
+            if time_process > 0:
+                print("----> ", time_process)
+                self.file.append(
+                    process[0]+", "+process[1]+", "+str(time_process))
+            else:
+                print("Completado")
+            self.file.pop(0)
 
     def SJF(self):
         List_Process_SJF = self.Open_File()
