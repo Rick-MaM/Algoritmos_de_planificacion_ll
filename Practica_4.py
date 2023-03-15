@@ -14,7 +14,7 @@ class Window:
         bar_menu = Menu(self.window)
 
         menu_process = Menu(bar_menu)
-        menu_process.add_command(label="Round Robin")
+        menu_process.add_command(label="Round Robin",command=self.Round_Robin)
         menu_process.add_command(label="SJF",command=self.SJF)
         menu_process.add_command(label="FIFO",command=self.FIFO)
         menu_process.add_command(label="Prioridad",command=self.priority)
@@ -94,27 +94,43 @@ class Window:
         return list_process
     
     def Round_Robin(self):
-        print("========> Round Robin <========")
+        List_Process_Round_Robin = self.Open_File()
         quantum = 3
-        self.File()
-        while len(self.file) != 0:
-            process = self.file[0].split(",")
+        while len(List_Process_Round_Robin) != 0:
+
+            process = List_Process_Round_Robin[0].split(",")
             time_process = int(process[2])
-            print("Proceso: ", process[0], "------>", end="")
+            load = ""
+            lblprocess = Label(self.frame, text=process[0])
+            lblprocess.place(x=10, y=3)
+            self.update_process_data(process[0], process[1], process[2], True)
+            self.window.update()
+
             for count_time in range(quantum):
                 if time_process == 0:
                     break
                 else:
                     time_process -= 1
+                
+                lblLoad = Label(self.frame, text=load, bg="GREEN", fg="GREEN")
+                lblLoad.place(x=200, y=3)
+                lblTime = Label(self.window, text=count_time + 1)
+                lblTime.place(x=40, y=310)
+                load = load + " "
+                self.window.update()
                 time.sleep(1)
-                print(".", end="")
+
             if time_process > 0:
-                print("----> ", time_process)
-                self.file.append(
+                List_Process_Round_Robin.append(
                     process[0]+", "+process[1]+", "+str(time_process))
             else:
                 print("Completado")
-            self.file.pop(0)
+                
+            self.update_process_data(process[0], process[1], process[2], False)
+            lblprocess.destroy()
+            lblTime.destroy()
+            self.window.update()
+            List_Process_Round_Robin.pop(0)
 
     def SJF(self):
         List_Process_SJF = self.Open_File()
