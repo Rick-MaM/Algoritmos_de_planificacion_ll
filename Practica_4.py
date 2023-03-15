@@ -174,12 +174,15 @@ class Window:
             List_Process_FIFO.pop(0)
 
     def priority(self):
-        print("========> Prioridad <========")
         List_Process_priority = self.Open_File()
         list_priority = self.sort_process(List_Process_priority, 1)
         number_process = len(List_Process_priority)
 
         while len(List_Process_priority) != 0:
+            if self.band_add:
+                List_Process_priority = self.current_list(List_Process_priority)
+                self.band_add = False
+                self.list_new_processes = []
 
             for count_process in range(number_process+1):
                 process = List_Process_priority[count_process].split(",")
@@ -191,8 +194,6 @@ class Window:
                     self.update_process_data(process[0], process[1], process[2], True)
                     self.window.update()
 
-                    print("Proceso: ", process[0], "------> ", end="")
-
                     for count in range(int(process[2])):
                         lblLoad = Label(self.frame, text=load,bg="GREEN", fg="GREEN")
                         lblLoad.place(x=200, y=3)
@@ -201,8 +202,6 @@ class Window:
                         load = load + " "
                         self.window.update()
                         time.sleep(1)
-                        print(".", end="")
-                    print("completado")
                     break
             
             self.update_process_data(process[0], process[1], process[2], False)
