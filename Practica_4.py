@@ -15,7 +15,7 @@ class Window:
 
         menu_process = Menu(bar_menu)
         menu_process.add_command(label="Round Robin")
-        menu_process.add_command(label="SJF")
+        menu_process.add_command(label="SJF",command=self.SJF)
         menu_process.add_command(label="FIFO",command=self.FIFO)
         menu_process.add_command(label="Prioridad")
         bar_menu.add_cascade(label="Algoritmos", menu=menu_process)
@@ -49,17 +49,20 @@ class Window:
         window_add = Tk()
         window_add.title("Agregar")
         window_add.geometry("300x250")
+
         Label(window_add, text="Nombre de proceso").place(x=10,y=10)
         self.txtProcess = Entry(window_add, width=20)
         self.txtProcess.place(x=10,y=40)
+
         Label(window_add, text="Prioridad").place(x=10,y=70)
         self.txtPriority = Entry(window_add, width=10)
         self.txtPriority.place(x=10, y=100)
+
         Label(window_add, text="Tiempo").place(x=10,y=130)
         self.txtTime = Entry(window_add, width=10)
         self.txtTime.place(x=10, y=160)
-        Label(window_add, text="Posicion").place(x=10, y=190)
 
+        Label(window_add, text="Posicion").place(x=10, y=190)
         variable = StringVar()
         self.option = ttk.Combobox(window_add, width=17,textvariable=variable)
         self.option["values"] = ("Al final","Al principio")
@@ -99,22 +102,43 @@ class Window:
         return Time
 
     def SJF(self):
-        print("========> SJF <========")
-        self.File()
-        times = self.shoter_time(self.file)
-        number_process = len(self.file)
-        while len(self.file) != 0:
+        List_Process_SJF = self.Open_File()
+        times = self.shoter_time(List_Process_SJF)
+        number_process = len(List_Process_SJF)
+        while len(List_Process_SJF) != 0:
+            if self.band_add:
+                List_Process_SJF = self.current_list(List_Process_SJF)
+                times = self.shoter_time(List_Process_SJF)
+                self.band_add = False
+                self.list_new_processes = []
+
             for count_process in range(number_process+1):
-                process = self.file[count_process].split(",")
+                process = List_Process_SJF[count_process].split(",")
+
                 if times[0] == int(process[2]):
-                    print("Proceso: ", process[0], "------> ", end="")
+                    load = ""
+                    lblprocess = Label(self.frame, text=process[0])
+                    lblprocess.place(x=10, y=3)
+                    self.update_process_data(process[0], process[1], process[2], True)
+                    self.window.update()
+
                     for count in range(times[0]):
+                        lblLoad = Label(self.frame, text=load,bg="GREEN", fg="GREEN")
+                        lblLoad.place(x=200, y=3)
+                        lblTime = Label(self.window, text=count + 1)
+                        lblTime.place(x=40, y=310)
+                        load = load + " "
+                        self.window.update()
                         time.sleep(1)
-                        print(".", end="")
-                    print("completado")
+                        lblLoad.destroy()
                     break
-            self.file.pop(count_process)
-            number_process = len(self.file)
+
+            self.update_process_data(process[0], process[1], process[2], False)
+            lblprocess.destroy()
+            lblTime.destroy()
+            self.window.update()
+            List_Process_SJF.pop(count_process)
+            number_process = len(List_Process_SJF)
             times.pop(0)
     
     def FIFO(self):
@@ -123,13 +147,17 @@ class Window:
             if self.band_add:
                 List_Process_FIFO = self.current_list(List_Process_FIFO)
                 self.band_add = False
+                self.list_new_processes = []
+
             process = List_Process_FIFO[0].split(",")
             load = ""
             lblprocess = Label(self.frame, text=process[0])
             lblprocess.place(x=10, y=3)
             self.update_process_data(process[0],process[1],process[2],True)
             self.window.update()
+
             for count in range(int(process[2])):
+
                 lblLoad = Label(self.frame, text=load, bg="GREEN",fg="GREEN")
                 lblLoad.place(x=200, y=3)
                 lblTime = Label(self.window, text=count + 1)
@@ -138,6 +166,7 @@ class Window:
                 self.window.update()
                 time.sleep(1)
                 lblLoad.destroy()
+
             self.update_process_data(process[0], process[1], process[2], False)
             lblprocess.destroy()
             lblTime.destroy()
@@ -159,8 +188,6 @@ class Window:
 
 
         
-
-
 if __name__ == "__main__":
     ventana = Tk()
     apliaction = Window(ventana)
