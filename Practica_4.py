@@ -17,7 +17,7 @@ class Window:
         menu_process.add_command(label="Round Robin")
         menu_process.add_command(label="SJF",command=self.SJF)
         menu_process.add_command(label="FIFO",command=self.FIFO)
-        menu_process.add_command(label="Prioridad")
+        menu_process.add_command(label="Prioridad",command=self.priority)
         bar_menu.add_cascade(label="Algoritmos", menu=menu_process)
 
         menu_Add = Menu(bar_menu)
@@ -93,22 +93,22 @@ class Window:
             list_process = file.readlines()
         return list_process
 
-    def shoter_time(self, list_SJF):
-        Time = []
+    def sort_process(self, list_SJF,time_or_priority):
+        sort_process = []
         for count_time in range(len(list_SJF)):
             process = list_SJF[count_time].split(",")
-            Time.append(int(process[2]))
-        Time.sort()
-        return Time
+            sort_process.append(int(process[time_or_priority]))
+        sort_process.sort()
+        return sort_process
 
     def SJF(self):
         List_Process_SJF = self.Open_File()
-        times = self.shoter_time(List_Process_SJF)
+        times = self.sort_process(List_Process_SJF,2)
         number_process = len(List_Process_SJF)
         while len(List_Process_SJF) != 0:
             if self.band_add:
                 List_Process_SJF = self.current_list(List_Process_SJF)
-                times = self.shoter_time(List_Process_SJF)
+                times = self.sort_process(List_Process_SJF,2)
                 self.band_add = False
                 self.list_new_processes = []
 
@@ -172,6 +172,46 @@ class Window:
             lblTime.destroy()
             self.window.update()
             List_Process_FIFO.pop(0)
+
+    def priority(self):
+        print("========> Prioridad <========")
+        List_Process_priority = self.Open_File()
+        list_priority = self.sort_process(List_Process_priority, 1)
+        number_process = len(List_Process_priority)
+
+        while len(List_Process_priority) != 0:
+
+            for count_process in range(number_process+1):
+                process = List_Process_priority[count_process].split(",")
+
+                if list_priority[0] == int(process[1]):
+                    load = ""
+                    lblprocess = Label(self.frame, text=process[0])
+                    lblprocess.place(x=10, y=3)
+                    self.update_process_data(process[0], process[1], process[2], True)
+                    self.window.update()
+
+                    print("Proceso: ", process[0], "------> ", end="")
+
+                    for count in range(int(process[2])):
+                        lblLoad = Label(self.frame, text=load,bg="GREEN", fg="GREEN")
+                        lblLoad.place(x=200, y=3)
+                        lblTime = Label(self.window, text=count + 1)
+                        lblTime.place(x=40, y=310)
+                        load = load + " "
+                        self.window.update()
+                        time.sleep(1)
+                        print(".", end="")
+                    print("completado")
+                    break
+            
+            self.update_process_data(process[0], process[1], process[2], False)
+            lblprocess.destroy()
+            lblTime.destroy()
+            self.window.update()
+            List_Process_priority.pop(count_process)
+            number_process = len(List_Process_priority)
+            list_priority.pop(0)
         
     def update_process_data(self,name,priority,time,insert):
         if insert:
