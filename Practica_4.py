@@ -100,9 +100,6 @@ class Window:
 
             process = List_Process_Round_Robin[0].split(",")
             time_process = int(process[2])
-            load = ""
-            lblprocess = Label(self.frame, text=process[0])
-            lblprocess.place(x=10, y=3)
             self.update_process_data(process[0], process[1], process[2], True)
             self.window.update()
 
@@ -112,11 +109,8 @@ class Window:
                 else:
                     time_process -= 1
                 
-                lblLoad = Label(self.frame, text=load, bg="GREEN", fg="GREEN")
-                lblLoad.place(x=200, y=3)
                 lblTime = Label(self.window, text=count_time + 1)
                 lblTime.place(x=40, y=310)
-                load = load + " "
                 self.window.update()
                 time.sleep(1)
 
@@ -124,10 +118,9 @@ class Window:
                 List_Process_Round_Robin.append(
                     process[0]+", "+process[1]+", "+str(time_process))
             else:
-                print("Completado")
-                
+                pass
+
             self.update_process_data(process[0], process[1], process[2], False)
-            lblprocess.destroy()
             lblTime.destroy()
             self.window.update()
             List_Process_Round_Robin.pop(0)
@@ -147,25 +140,16 @@ class Window:
                 process = List_Process_SJF[count_process].split(",")
 
                 if times[0] == int(process[2]):
-                    load = ""
-                    lblprocess = Label(self.frame, text=process[0])
-                    lblprocess.place(x=10, y=3)
                     self.update_process_data(process[0], process[1], process[2], True)
                     self.window.update()
 
                     for count in range(times[0]):
-                        lblLoad = Label(self.frame, text=load,bg="GREEN", fg="GREEN")
-                        lblLoad.place(x=200, y=3)
                         lblTime = Label(self.window, text=count + 1)
                         lblTime.place(x=40, y=310)
-                        load = load + " "
                         self.window.update()
                         time.sleep(1)
-                        lblLoad.destroy()
                     break
-
             self.update_process_data(process[0], process[1], process[2], False)
-            lblprocess.destroy()
             lblTime.destroy()
             self.window.update()
             List_Process_SJF.pop(count_process)
@@ -181,25 +165,16 @@ class Window:
                 self.list_new_processes = []
 
             process = List_Process_FIFO[0].split(",")
-            load = ""
-            lblprocess = Label(self.frame, text=process[0])
-            lblprocess.place(x=10, y=3)
             self.update_process_data(process[0],process[1],process[2],True)
             self.window.update()
-
             for count in range(int(process[2])):
 
-                lblLoad = Label(self.frame, text=load, bg="GREEN",fg="GREEN")
-                lblLoad.place(x=200, y=3)
                 lblTime = Label(self.window, text=count + 1)
                 lblTime.place(x=40,y=310)
-                load = load + " "
                 self.window.update()
                 time.sleep(1)
-                lblLoad.destroy()
 
             self.update_process_data(process[0], process[1], process[2], False)
-            lblprocess.destroy()
             lblTime.destroy()
             self.window.update()
             List_Process_FIFO.pop(0)
@@ -219,25 +194,20 @@ class Window:
                 process = List_Process_priority[count_process].split(",")
 
                 if list_priority[0] == int(process[1]):
-                    load = ""
-                    lblprocess = Label(self.frame, text=process[0])
-                    lblprocess.place(x=10, y=3)
                     self.update_process_data(process[0], process[1], process[2], True)
                     self.window.update()
 
                     for count in range(int(process[2])):
-                        lblLoad = Label(self.frame, text=load,bg="GREEN", fg="GREEN")
-                        lblLoad.place(x=200, y=3)
+
                         lblTime = Label(self.window, text=count + 1)
                         lblTime.place(x=40, y=310)
-                        load = load + " "
                         self.window.update()
                         time.sleep(1)
                     break
             
             self.update_process_data(process[0], process[1], process[2], False)
-            lblprocess.destroy()
             lblTime.destroy()
+            
             self.window.update()
             List_Process_priority.pop(count_process)
             number_process = len(List_Process_priority)
@@ -264,8 +234,6 @@ class Window:
             self.lblpriority.destroy()
             self.lbltime.destroy()
 
-
-        
 if __name__ == "__main__":
     ventana = Tk()
     apliaction = Window(ventana)
