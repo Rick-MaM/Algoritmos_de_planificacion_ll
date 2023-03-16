@@ -89,7 +89,6 @@ class Window:
                 list_process = new_list_process + list_process
 
             self.list_new_processes.pop(0)
-        print(list_process)
         return list_process
              
     def Open_File(self):
@@ -101,7 +100,9 @@ class Window:
         List_Process_Round_Robin = self.Open_File()
         quantum = 3
         while len(List_Process_Round_Robin) != 0:
-
+            if self.band_add:
+                List_Process_priority = self.current_list(List_Process_priority)
+                self.band_add = False
             process = List_Process_Round_Robin[0].split(",")
             time_process = int(process[2])
             self.destroy_or_insert_label(process[0], process[1], process[2], True)
