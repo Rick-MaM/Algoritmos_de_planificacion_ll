@@ -187,20 +187,14 @@ class Window:
 
                 if list_priority[0] == int(process[1]):
                     self.destroy_or_insert_label(process[0], process[1], process[2], True)
-                    self.window.update()
 
                     for count in range(int(process[2])):
-
-                        lblTime = Label(self.window, text=count + 1)
-                        lblTime.place(x=40, y=310)
-                        self.window.update()
+                        self.process_counting(count,True)
                         time.sleep(1)
                     break
             
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
-            lblTime.destroy()
-            
-            self.window.update()
+            self.process_counting(count, False)
             List_Process_priority.pop(count_process)
             number_process = len(List_Process_priority)
             list_priority.pop(0)
@@ -228,6 +222,16 @@ class Window:
             self.lblprocess.destroy()
             self.lblpriority.destroy()
             self.lbltime.destroy()
+        self.window.update()
+    
+    def process_counting(self,count_time,insert):
+        if insert:
+            self.lblcount_time = Label(self.frame, text=f"Tiempo de ejecucion: {count_time + 1}")
+            self.lblcount_time.place(x=20,y=110)
+        else:
+            self.lblcount_time.destroy()
+        self.window.update()
+        
 
 if __name__ == "__main__":
     ventana = Tk()
