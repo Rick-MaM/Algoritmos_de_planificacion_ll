@@ -67,18 +67,30 @@ class Window:
         window_add.mainloop
 
     def new_process(self):
-        new = self.txtProcess.get() + "," + self.txtPriority.get() + "," + self.txtTime.get()
+        new = self.txtProcess.get() + "," + self.txtPriority.get() + "," + self.txtTime.get() + "," + self.option.get()
         self.list_new_processes.append(new)
+
+        self.txtProcess.delete(0,END)
+        self.txtPriority.delete(0,END)
+        self.txtTime.delete(0,END)
         self.band_add = True
 
     def current_list(self,list_process):
-        if self.option.get() == "Al final":
-            list_process = list_process + self.list_new_processes
-            return list_process
-        elif self.option.get() == "Al principio":
+        while len(self.list_new_processes) != 0:
             new_list_process = []
-            new_list_process = self.list_new_processes + list_process
-            return new_list_process
+            new_process = self.list_new_processes[0].split(",")
+            new = new_process[0] + "," + new_process[1] + "," + new_process[2]
+            new_list_process.append(new)
+
+            if new_process[3] == "Al final":
+                list_process = list_process + new_list_process
+
+            elif new_process[3] == "Al principio":
+                list_process = new_list_process + list_process
+
+            self.list_new_processes.pop(0)
+        print(list_process)
+        return list_process
              
     def Open_File(self):
         with open("procesos.txt","r") as file:
@@ -101,9 +113,7 @@ class Window:
                 else:
                     time_process -= 1
                 
-                lblTime = Label(self.window, text=count_time + 1)
-                lblTime.place(x=40, y=310)
-                self.window.update()
+                self.process_counting(count_time, True)
                 time.sleep(1)
 
             if time_process > 0:
@@ -113,8 +123,7 @@ class Window:
                 pass
 
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
-            lblTime.destroy()
-            self.window.update()
+            self.process_counting(count_time, False)
             List_Process_Round_Robin.pop(0)
 
     def SJF(self):
@@ -126,7 +135,6 @@ class Window:
                 List_Process_SJF = self.current_list(List_Process_SJF)
                 times = self.sort_process(List_Process_SJF,2)
                 self.band_add = False
-                self.list_new_processes = []
 
             for count_process in range(number_process+1):
                 process = List_Process_SJF[count_process].split(",")
@@ -136,14 +144,11 @@ class Window:
                     self.window.update()
 
                     for count in range(times[0]):
-                        lblTime = Label(self.window, text=count + 1)
-                        lblTime.place(x=40, y=310)
-                        self.window.update()
+                        self.process_counting(count, True)
                         time.sleep(1)
                     break
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
-            lblTime.destroy()
-            self.window.update()
+            self.process_counting(count, False)
             List_Process_SJF.pop(count_process)
             number_process = len(List_Process_SJF)
             times.pop(0)
@@ -154,21 +159,17 @@ class Window:
             if self.band_add:
                 List_Process_FIFO = self.current_list(List_Process_FIFO)
                 self.band_add = False
-                self.list_new_processes = []
 
             process = List_Process_FIFO[0].split(",")
             self.destroy_or_insert_label(process[0], process[1], process[2], True)
             self.window.update()
             for count in range(int(process[2])):
 
-                lblTime = Label(self.window, text=count + 1)
-                lblTime.place(x=40,y=310)
-                self.window.update()
+                self.process_counting(count, True)
                 time.sleep(1)
 
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
-            lblTime.destroy()
-            self.window.update()
+            self.process_counting(count, False)
             List_Process_FIFO.pop(0)
 
     def priority(self):
@@ -180,7 +181,6 @@ class Window:
             if self.band_add:
                 List_Process_priority = self.current_list(List_Process_priority)
                 self.band_add = False
-                self.list_new_processes = []
 
             for count_process in range(number_process+1):
                 process = List_Process_priority[count_process].split(",")
