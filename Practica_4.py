@@ -6,7 +6,7 @@ class Window:
     def __init__(self,window):
         self.window = window
         self.window.title("Algoritmos de planificacion")
-        self.window.geometry("450x350")
+        self.window.geometry("600x260")
 
         self.band_add = False
         self.list_new_processes = []
@@ -26,7 +26,7 @@ class Window:
         self.window.config(menu=bar_menu)
 
         self.frame = LabelFrame(self.window,text="PROCESO EN EJECUCION")
-        self.frame.place(x=20, y=20,width=410,height=60)
+        self.frame.place(x=20, y=20,width=290,height=235)
         
         table = ttk.Treeview(self.window, columns=("col1"))
         table.column("#0",width=133)
@@ -35,15 +35,7 @@ class Window:
         table.heading("#0", text="Proceso",anchor=CENTER)
         table.heading("col1", text="Estado", anchor=CENTER)
 
-        table.place(x=160, y=100)
-
-        Label(self.window, text="-----> Proceso <-----",fg="BLUE").place(x=20,y=100)
-
-        Label(self.window, text="-----> Prioridad <-----",fg="BLUE").place(x=20, y=160)
-        
-        Label(self.window, text="-----> Tiempo <-----",fg="BLUE").place(x=20, y=220)
-
-        Label(self.window, text=">Tiempo de ejecucion<",fg="BLUE").place(x=20, y=280)
+        table.place(x=320, y=28)
     
     def window_new_process(self):
         window_add = Tk()
@@ -100,7 +92,7 @@ class Window:
 
             process = List_Process_Round_Robin[0].split(",")
             time_process = int(process[2])
-            self.update_process_data(process[0], process[1], process[2], True)
+            self.destroy_or_insert_label(process[0], process[1], process[2], True)
             self.window.update()
 
             for count_time in range(quantum):
@@ -120,7 +112,7 @@ class Window:
             else:
                 pass
 
-            self.update_process_data(process[0], process[1], process[2], False)
+            self.destroy_or_insert_label(process[0], process[1], process[2], False)
             lblTime.destroy()
             self.window.update()
             List_Process_Round_Robin.pop(0)
@@ -140,7 +132,7 @@ class Window:
                 process = List_Process_SJF[count_process].split(",")
 
                 if times[0] == int(process[2]):
-                    self.update_process_data(process[0], process[1], process[2], True)
+                    self.destroy_or_insert_label(process[0], process[1], process[2], True)
                     self.window.update()
 
                     for count in range(times[0]):
@@ -149,7 +141,7 @@ class Window:
                         self.window.update()
                         time.sleep(1)
                     break
-            self.update_process_data(process[0], process[1], process[2], False)
+            self.destroy_or_insert_label(process[0], process[1], process[2], False)
             lblTime.destroy()
             self.window.update()
             List_Process_SJF.pop(count_process)
@@ -165,7 +157,7 @@ class Window:
                 self.list_new_processes = []
 
             process = List_Process_FIFO[0].split(",")
-            self.update_process_data(process[0],process[1],process[2],True)
+            self.destroy_or_insert_label(process[0], process[1], process[2], True)
             self.window.update()
             for count in range(int(process[2])):
 
@@ -174,7 +166,7 @@ class Window:
                 self.window.update()
                 time.sleep(1)
 
-            self.update_process_data(process[0], process[1], process[2], False)
+            self.destroy_or_insert_label(process[0], process[1], process[2], False)
             lblTime.destroy()
             self.window.update()
             List_Process_FIFO.pop(0)
@@ -194,7 +186,7 @@ class Window:
                 process = List_Process_priority[count_process].split(",")
 
                 if list_priority[0] == int(process[1]):
-                    self.update_process_data(process[0], process[1], process[2], True)
+                    self.destroy_or_insert_label(process[0], process[1], process[2], True)
                     self.window.update()
 
                     for count in range(int(process[2])):
@@ -205,7 +197,7 @@ class Window:
                         time.sleep(1)
                     break
             
-            self.update_process_data(process[0], process[1], process[2], False)
+            self.destroy_or_insert_label(process[0], process[1], process[2], False)
             lblTime.destroy()
             
             self.window.update()
@@ -221,14 +213,17 @@ class Window:
         sort_process.sort()
         return sort_process
         
-    def update_process_data(self,name,priority,time,insert):
+    def destroy_or_insert_label(self,name,priority,time,insert):
         if insert:
-            self.lblprocess = Label(self.window, text=name)
-            self.lblprocess.place(x=40,y=130)
-            self.lblpriority = Label(self.window, text=priority)
-            self.lblpriority.place(x=40, y=190)
-            self.lbltime = Label(self.window, text=time)
-            self.lbltime.place(x=40, y=250)
+            self.lblprocess = Label(self.frame, text=f"Proceso: {name}")
+            self.lblprocess.place(x=20, y=20)
+
+            self.lblpriority = Label(self.frame, text=f"Prioridad : {priority}")
+            self.lblpriority.place(x=20, y=50)
+
+            self.lbltime = Label(self.frame, text=f"Tiempo: {time}")
+            self.lbltime.place(x=20, y=80)
+            
         else:
             self.lblprocess.destroy()
             self.lblpriority.destroy()
