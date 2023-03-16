@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import time 
 
-class Window:
+class Process_Window:
     def __init__(self,window):
         self.window = window
         self.window.title("Algoritmos de planificacion")
@@ -33,14 +33,14 @@ class Window:
         self.frame = LabelFrame(self.window,text="PROCESO EN EJECUCION")
         self.frame.place(x=20, y=20,width=290,height=235)
         
-        table = ttk.Treeview(self.window, columns=("col1"))
-        table.column("#0",width=133)
-        table.column("col1", width=133,anchor=CENTER)
+        self.table = ttk.Treeview(self.window, columns=("col1"))
+        self.table.column("#0", width=133)
+        self.table.column("col1", width=133, anchor=CENTER)
 
-        table.heading("#0", text="Proceso",anchor=CENTER)
-        table.heading("col1", text="Estado", anchor=CENTER)
+        self.table.heading("#0", text="Proceso", anchor=CENTER)
+        self.table.heading("col1", text="Estado", anchor=CENTER)
 
-        table.place(x=320, y=28)
+        self.table.place(x=320, y=28)
     
     def window_new_process(self):
         window_add = Tk()
@@ -81,6 +81,7 @@ class Window:
             self.change_list()
         lblProcess.destroy()
         self.stop_process = False
+        self.delete_table_date()
 
     def menu_SJF(self):
         lblProcess = Label(self.frame, text="---> SJF <---", fg="BLUE")
@@ -92,6 +93,7 @@ class Window:
             self.change_list()
         self.stop_process = False
         lblProcess.destroy()
+        self.delete_table_date()
     
     def menu_FIFO(self):
         lblProcess = Label(self.frame, text="---> FIFO <---", fg="BLUE")
@@ -103,6 +105,7 @@ class Window:
             self.change_list()
         self.stop_process = False
         lblProcess.destroy()
+        self.delete_table_date()
     
     def menu_priority(self):
         lblProcess = Label(self.frame, text="---> Prioridad <---", fg="BLUE")
@@ -114,6 +117,7 @@ class Window:
             self.change_list()
         self.stop_process = False
         lblProcess.destroy()
+        self.delete_table_date()
 
     def stop(self):
         self.stop_process = True
@@ -175,7 +179,7 @@ class Window:
                 List_Process_Round_Robin.append(
                     process[0]+", "+process[1]+", "+str(time_process))
             else:
-                pass
+                self.insert_table(process[0])
 
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
             self.process_counting(count_time, False)
@@ -202,7 +206,8 @@ class Window:
                     for count in range(times[0]):
                         self.process_counting(count, True)
                         time.sleep(1)
-                    break
+                    self.insert_table(process[0])
+                    break       
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
             self.process_counting(count, False)
             List_Process_SJF.pop(count_process)
@@ -225,7 +230,8 @@ class Window:
 
                 self.process_counting(count, True)
                 time.sleep(1)
-
+            
+            self.insert_table(process[0])
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
             self.process_counting(count, False)
             List_Process_FIFO.pop(0)
@@ -251,6 +257,7 @@ class Window:
                     for count in range(int(process[2])):
                         self.process_counting(count,True)
                         time.sleep(1)
+                    self.insert_table(process[0])
                     break
             
             self.destroy_or_insert_label(process[0], process[1], process[2], False)
@@ -293,8 +300,16 @@ class Window:
         else:
             self.lblcount_time.destroy()
         self.window.update()
+    
+    def insert_table(self, process):
+        self.table.insert("",END,text=process,values="Finalizado")
+    
+    def delete_table_date(self):
+        registry = self.table.get_children()
+        for count_registry in registry:
+            self.table.delete(count_registry)
         
 if __name__ == "__main__":
     ventana = Tk()
-    apliaction = Window(ventana)
+    apliaction = Process_Window(ventana)
     ventana.mainloop()
